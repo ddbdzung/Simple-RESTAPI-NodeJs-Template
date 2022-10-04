@@ -4,7 +4,7 @@
   "description": "A simple restAPI nodejs template using expressjs, mongodb (or other database), logger (as winston and morgan)",
   "main": "index.mjs",
   "scripts": {
-    "start": "pm2 start ecosystem.config.json --no-daemon",
+    "start": "pm2 start ecosystem.config.cjs --no-daemon",
     "stop": "pm2 kill",
     "dev": "cross-env NODE_ENV=development nodemon index.mjs",
     "test": "cross-env NODE_ENV=test nodemon index.mjs"

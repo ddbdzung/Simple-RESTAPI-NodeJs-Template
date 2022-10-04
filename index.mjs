@@ -3,8 +3,6 @@ import app from './app.mjs'
 import logger from './src/config/logger.mjs'
 import { getCurrentDateTime } from './src/helpers/dateToolkit.mjs'
 
-const port = process.env.PORT || 2703
-let server
 const serverErrorHandler = (error) => {
   logger.error(`Error: ${error.message}`)
   if (server) {
@@ -16,7 +14,7 @@ const serverErrorHandler = (error) => {
 
 // Config database go here
 // Default is MongoDB
-const databaseName = process.env?.DB_NAME || 'default'
+const databaseName = process.env.DB_NAME || 'default'
 // Set up your uri connection to MongoDB, default is standalone
 const uri = `mongodb://localhost:27017/${databaseName}`
 // Set up your options to MongoDB, default is below
@@ -25,6 +23,8 @@ const options = {
   useUnifiedTopology: true,
 }
 
+const port = process.env.PORT || 2703
+let server
 // Async code go here
 mongoose.connect(uri, options).then(() => {
   logger.info('Connected to MongoDB');
@@ -45,3 +45,9 @@ process.on('uncaughtException', serverErrorHandler)
 process.on('exit', () => {
   logger.info('Server closed')
 })
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received');
+  if (server) {
+    server.close();
+  }
+});

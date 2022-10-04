@@ -1,9 +1,12 @@
-import { __DIRNAME, path, statusCode } from './src/constants/index.mjs'
-
+import { statusCode } from './src/constants/index.mjs'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+// Get current dirname
+const __dirname = dirname(fileURLToPath(import.meta.url))
 // Assign path to environment file
 if (process.env.NODE_ENV === 'development') {
-  let dotenv = await import('dotenv')
-  dotenv.config({ path: path.join(__DIRNAME, 'config', '.env') })
+  const dotenv = await import('dotenv')
+  dotenv.config({ path: path.join(__dirname, '.env') })
 }
 
 import express from 'express'

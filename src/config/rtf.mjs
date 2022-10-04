@@ -1,9 +1,9 @@
-// Set a global index for each lifecycle server deployment
-// global.globalFileIndex = 1
-
 // Config stream log file rotating by options
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 import rfs from 'rotating-file-stream'
-import { __DIRNAME, path } from '../constants/index.mjs'
 import { getHighResDateTime } from '../helpers/dateToolkit.mjs'
 
 const generator = (time, index) => {
@@ -14,7 +14,7 @@ const generator = (time, index) => {
 const stream = rfs.createStream(generator, {
   size: '10M',  // rotate every 10 MegaBytes written
   interval: '1d', // rotate daily
-  path: path.join(__DIRNAME, '..', 'logs')
+  path: path.join(__dirname, '..', 'logs')
 })
 
 export default stream
