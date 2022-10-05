@@ -1,2 +1,1 @@
-export * as msg from './message.mjs'
-export * as statusCode from './statusCode.mjs'
+export * as api from './api.mjs'

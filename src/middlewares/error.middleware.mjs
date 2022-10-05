@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
+import httpStatus from 'http-status'
 
 import logger from '../config/logger.mjs'
-import { statusCode as httpStatus, msg } from '../constants/index.mjs'
 import ApiError from '../helpers/ApiError.mjs'
 
 const errorConverter = (err, req, res, next) => {
@@ -9,7 +9,7 @@ const errorConverter = (err, req, res, next) => {
   if (!(error instanceof ApiError)) {
     const statusCode =
       error.statusCode || error instanceof mongoose.Error ? httpStatus.BAD_REQUEST : httpStatus.INTERNAL_SERVER_ERROR
-    const message = error.message || (statusCode === 400) ? msg.BAD_REQUEST : msg.INTERNAL_SERVER_ERROR
+    const message = error.message || httpStatus[statusCode]
     error = new ApiError(statusCode, message, false, err.stack)
   }
   next(error)
@@ -21,7 +21,7 @@ const errorHandler = (err, req, res, next) => {
 
   if (process.env.NODE_ENV === 'production' && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR
-    message = msg.INTERNAL_SERVER_ERROR
+    message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR]
   }
 
   res.locals.errorMessage = err.message
@@ -35,6 +35,7 @@ const errorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     logger.error(err)
   }
+
   res.status(statusCode).send(response)
 }
 

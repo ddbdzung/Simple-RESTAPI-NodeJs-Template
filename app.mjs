@@ -1,4 +1,3 @@
-import { statusCode } from './src/constants/index.mjs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 // Get current dirname
@@ -17,6 +16,7 @@ import {
   errorHandler,
   successHandler
 } from './src/config/morgan.mjs'
+import httpStatus from 'http-status'
 
 import ApiError from './src/helpers/ApiError.mjs'
 import {
@@ -55,7 +55,7 @@ app.use(defaultLimiter)
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
-  next(new ApiError(statusCode.NOT_FOUND, 'Not found'));
+  next(new ApiError(httpStatus.NOT_FOUND, httpStatus[404]));
 });
 
 // convert error to ApiError, if needed
