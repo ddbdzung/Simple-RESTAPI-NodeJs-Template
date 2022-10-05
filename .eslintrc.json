@@ -1,0 +1,26 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": ["airbnb-base", "plugin:security/recommended"],
+  "plugins": ["security"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "semi": "off",
+    "arrow-parens": "off",
+    "import/extensions": "off",
+    "no-console": "error",
+    "func-names": "off",
+    "no-underscore-dangle": "off",
+    "consistent-return": "off",
+    "jest/expect-expect": "off",
+    "security/detect-object-injection": "off"
+  }
+}

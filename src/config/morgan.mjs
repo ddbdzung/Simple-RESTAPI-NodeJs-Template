@@ -1,5 +1,6 @@
 import morgan, { token } from 'morgan'
-let stream = undefined
+
+let stream
 if (process.env.NODE_ENV === 'production') {
   stream = await import('./rtf.mjs')
 }
