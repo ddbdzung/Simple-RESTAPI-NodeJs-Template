@@ -12,6 +12,9 @@
     }
   },
   "rules": {
+    "import/no-named-default": "off",
+    "no-restricted-exports": "off",
+    "import/no-extraneous-dependencies": "off",
     "linebreak-style": "off",
     "semi": "off",
     "arrow-parens": "off",
@@ -21,6 +24,7 @@
     "no-underscore-dangle": "off",
     "consistent-return": "off",
     "jest/expect-expect": "off",
-    "security/detect-object-injection": "off"
+    "security/detect-object-injection": "off",
+    "import/prefer-default-export": "off"
   }
 }

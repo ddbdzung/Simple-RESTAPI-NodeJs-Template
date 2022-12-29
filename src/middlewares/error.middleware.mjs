@@ -29,7 +29,7 @@ const errorHandler = (err, req, res, next) => {
   const response = {
     code: statusCode,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...((process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') && { stack: err.stack }),
   }
 
   if (process.env.NODE_ENV === 'development') {
