@@ -1,7 +1,7 @@
 {
-  "name": "simple-restapi-nodejs-template",
+  "name": "simple-group-finance-management",
   "version": "1.0.0",
-  "description": "A simple restAPI nodejs template using expressjs, mongodb (or other database), logger (as winston and morgan)",
+  "description": "A simple group finance management WEB API",
   "main": "index.mjs",
   "scripts": {
     "start": "pm2 start ecosystem.config.cjs --no-daemon",
@@ -23,7 +23,7 @@
   "author": "David Dzung Dang",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ddbdzung/Simple-RESTAPI-NodeJs-Template.git"
+    "url": "git+https://github.com/ddbdzung/SGFM.git"
   },
   "license": "ISC",
   "dependencies": {

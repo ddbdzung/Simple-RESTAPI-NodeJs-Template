@@ -24,7 +24,6 @@ const setupTestDB = () => {
 
         if (adminRoles.length <= 0 && userRoles.length <= 0) {
           Role.create(adminRole, userRole)
-          console.log('Created roles for test env')
         }
       })
       .catch(err => console.log(err))

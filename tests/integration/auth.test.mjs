@@ -38,11 +38,11 @@ describe('Auth routes', () => {
     let sluggedUsername
     beforeEach(() => {
       newUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: 'babysocute02',
       }
-      sluggedUsername = slugify(newUser.username, { lower: true })
+      sluggedUsername = slugify(newUser.fullname, { lower: true })
     })
 
     it('should return 201 and successfully register user if request data is ok', async () => {
@@ -51,7 +51,7 @@ describe('Auth routes', () => {
       expect(res.body.data.user).not.toHaveProperty('password')
       expect(res.body.data.user).toEqual({
         id: expect.anything(),
-        username: newUser.username,
+        fullname: newUser.fullname,
         email: newUser.email,
         role: 'user',
         slug: sluggedUsername,
@@ -61,7 +61,7 @@ describe('Auth routes', () => {
       expect(dbNewUser).toBeDefined()
       expect(dbNewUser.password).not.toBe(newUser.password)
       expect(dbNewUser).toMatchObject({
-        username: newUser.username,
+        fullname: newUser.fullname,
         email: newUser.email,
         role: 'user',
         status: 'inactive',
@@ -111,7 +111,7 @@ describe('Auth routes', () => {
       expect(res.statusCode).toBe(200)
       expect(res.body.data.user).toEqual({
         id: expect.anything(),
-        username: userOne.username,
+        fullname: userOne.fullname,
         email: userOne.email,
         role: userOne.role,
         slug: userOne.slug,
@@ -163,7 +163,7 @@ describe('Auth routes', () => {
     beforeEach(async () => {
       const { role, status } = await import('../../src/constants/index.mjs')
       activeUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -219,7 +219,7 @@ describe('Auth routes', () => {
     const option = 'byEmail'
     beforeEach(async () => {
       activeUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -305,7 +305,7 @@ describe('Auth routes', () => {
     beforeEach(async () => {
       const { role, status } = await import('../../src/constants/index.mjs')
       activeUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -458,7 +458,7 @@ describe('Auth routes', () => {
     let resetPassword
     beforeEach(async () => {
       activeUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -542,7 +542,7 @@ describe('Auth routes', () => {
     beforeEach(async () => {
       const { role, status } = await import('../../src/constants/index.mjs')
       inactiveUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -585,6 +585,7 @@ describe('Auth routes', () => {
 
       expect(res.statusCode).toBe(400)
     })
+
     it('should return 401 if user is blackisted', async () => {
       const user = await userService.getUserByEmail(inactiveUser.email)
       const tokens = tokenService.generateAuthTokens(user)
@@ -592,22 +593,6 @@ describe('Auth routes', () => {
       const session = await tokenService.getSessionByToken(tokens.refresh.token)
       session.isBlacklisted = true
       await session.save()
-
-      const res = await
-        request(app)
-          .post(`${V1}/${BASE}/${REFRESH_TOKEN}`)
-          .set({ 'Authorization': `Bearer ${tokens.access.token}` })
-          .send({ refresh: tokens.refresh.token })
-
-      expect(res.statusCode).toBe(401)
-    })
-
-    it('should return 401 if user is banned', async () => {
-      const user = await userService.getUserByEmail(inactiveUser.email)
-      const tokens = tokenService.generateAuthTokens(user)
-      await tokenService.createSessionUser(tokens.refresh.token, user._id)
-      user.status = status.BANNED
-      await user.save()
 
       const res = await
         request(app)
@@ -627,7 +612,7 @@ describe('Auth routes', () => {
     beforeEach(async () => {
       const { role, status } = await import('../../src/constants/index.mjs')
       inactiveUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -635,6 +620,7 @@ describe('Auth routes', () => {
       }
       await insertUsers([inactiveUser])
     })
+
     it('should return 200 when log out session successfully', async () => {
       const user = await userService.getUserByEmail(inactiveUser.email)
       const tokens = tokenService.generateAuthTokens(user)
@@ -673,6 +659,36 @@ describe('Auth routes', () => {
       const res = await
         request(app)
           .post(`${V1}/${BASE}/${LOGOUT}`)
+          .send({ refresh: tokens.refresh.token })
+
+      expect(res.statusCode).toBe(400)
+    })
+
+    it('should return 400 if user provides fake AT in header', async () => {
+      const fakeAT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInN0YXR1cyI6ImluYWN0aXZlIiwiaWF0IjoxNjcyNjg1MDU3LCJleHAiOjE2NzI2ODUzNTd9.p56A1szy6MTc457z6ftpsmiGZiLuaNOcf6o6vphGvco'
+      const user = await userService.getUserByEmail(inactiveUser.email)
+      const tokens = tokenService.generateAuthTokens(user)
+      await tokenService.createSessionUser(tokens.refresh.token, user._id)
+
+      const res = await
+        request(app)
+          .post(`${V1}/${BASE}/${LOGOUT}`)
+          .set({ 'Authorization': `Bearer ${fakeAT}` })
+          .send({ refresh: tokens.refresh.token })
+
+      expect(res.statusCode).toBe(400)
+    })
+
+    it('should return 400 if user provides fake AT (user not exist) in header', async () => {
+      const fakeAT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInN0YXR1cyI6ImluYWN0aXZlIiwic3ViIjoiNjNiMzE3ZWUyYjI5MGUxZmU3YjQ3YzAwIiwiaWF0IjoxNjcyNjg1MDU3LCJleHAiOjE2NzI2ODUzNTd9.ZzEaJ3VTCaDoBgTNk3GEdm246aioKIDtm4FqVjp6jqA'
+      const user = await userService.getUserByEmail(inactiveUser.email)
+      const tokens = tokenService.generateAuthTokens(user)
+      await tokenService.createSessionUser(tokens.refresh.token, user._id)
+
+      const res = await
+        request(app)
+          .post(`${V1}/${BASE}/${LOGOUT}`)
+          .set({ 'Authorization': `Bearer ${fakeAT}` })
           .send({ refresh: tokens.refresh.token })
 
       expect(res.statusCode).toBe(400)

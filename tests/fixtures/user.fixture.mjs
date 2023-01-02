@@ -16,7 +16,7 @@ const adminName = faker.internet.userName()
 export const userOne = {
   password,
   _id: mongoose.Types.ObjectId(),
-  username: usernameOne,
+  fullname: usernameOne,
   email: faker.internet.email().toLocaleLowerCase(),
   role: 'user',
   status: 'inactive',
@@ -27,7 +27,7 @@ export const userOne = {
 export const userTwo = {
   password,
   _id: mongoose.Types.ObjectId(),
-  username: usernameTwo,
+  fullname: usernameTwo,
   email: faker.internet.email().toLocaleLowerCase(),
   role: 'user',
   status: 'active',
@@ -37,7 +37,7 @@ export const userTwo = {
 export const userThree = {
   password,
   _id: mongoose.Types.ObjectId(),
-  username: usernameThree,
+  fullname: usernameThree,
   email: faker.internet.email().toLocaleLowerCase(),
   role: 'user',
   status: 'banned',
@@ -47,7 +47,7 @@ export const userThree = {
 export const admin = {
   password,
   _id: mongoose.Types.ObjectId(),
-  username: adminName,
+  fullname: adminName,
   email: faker.internet.email().toLocaleLowerCase(),
   role: 'admin',
   status: 'active',

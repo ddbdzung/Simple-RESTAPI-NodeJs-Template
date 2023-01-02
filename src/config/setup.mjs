@@ -1,5 +1,5 @@
 import { permissionArray, permissions } from './permissions.mjs'
-import { role } from '../constants/index.mjs'
+import { role, status } from '../constants/index.mjs'
 import { userService } from '../services/index.mjs'
 
 const { READ_USER, UPDATE_USER } = permissions.USER
@@ -15,8 +15,9 @@ export const userRole = {
 }
 
 export const adminAccount = {
-  username: 'Administrator',
+  fullname: 'Administrator',
   email: 'isora2002@gmail.com',
   password: userService.hashPassword('root123!@#'),
   role: role.ADMIN,
+  status: status.ACTIVE,
 }

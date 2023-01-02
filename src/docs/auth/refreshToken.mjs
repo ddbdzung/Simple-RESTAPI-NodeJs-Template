@@ -2,6 +2,11 @@ export default {
   post: {
     summary: 'Reset access token and refresh token for user',
     tags: ['Auth CRUD operations'],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     requestBody: {
       required: true,
       content: {
@@ -58,24 +63,12 @@ export default {
         },
       },
       401: {
-        description: 'Unauthorized by invalid refresh token or malicious action or blacklist user or banned user',
+        description: 'Unauthorized by invalid refresh token or blacklist user',
         content: {
           'application/json': {
             example: {
               code: 401,
               message: 'Unauthorized',
-              data: [],
-            },
-          },
-        },
-      },
-      403: {
-        description: 'Detects malicious action, requires user to re-login again',
-        content: {
-          'application/json': {
-            example: {
-              code: 403,
-              message: 'Malicious action detected! Please authenticate your account!',
               data: [],
             },
           },

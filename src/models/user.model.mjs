@@ -4,7 +4,7 @@ import slugify from 'slugify'
 import { role, gender, status } from '../constants/index.mjs'
 
 const userSchema = mongoose.Schema({
-  username: {
+  fullname: {
     type: String,
     required: true,
     trim: true,
@@ -109,7 +109,7 @@ userSchema.methods.rolePopulating = async function (projection) {
 };
 
 userSchema.pre('save', async function (next) {
-  this.slug = slugify(this.username, { lower: true })
+  this.slug = slugify(this.fullname, { lower: true })
   next()
 })
 

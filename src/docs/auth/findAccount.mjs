@@ -40,20 +40,8 @@ export default {
           },
         },
       },
-      400: {
-        description: 'User not exist',
-        content: {
-          'application/json': {
-            example: {
-              code: 400,
-              message: 'Email not exists',
-              data: [],
-            },
-          },
-        },
-      },
       401: {
-        description: 'User account is inactive',
+        description: 'User account is inactive or not exist',
         content: {
           'application/json': {
             example: {

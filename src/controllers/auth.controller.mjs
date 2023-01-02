@@ -24,7 +24,7 @@ import { config } from '../validations/index.mjs'
 import { stringToDate } from '../common/toDate.mjs'
 
 export const register = catchAsync(async (req, res) => {
-  const doc = pick(req.body, ['username', 'email', 'password'])
+  const doc = pick(req.body, ['fullname', 'email', 'password'])
   try {
     const user = await userService.createUser(doc)
     const { resetPwRate, ...sanitizedUser } = sanitize(user, 0)
@@ -103,7 +103,7 @@ export const sendResetPwMail = catchAsync(async (req, res) => {
       token: clientToken,
     })
   } catch (err) {
-    errorResponseSpecification(err, res, [httpStatus.UNAUTHORIZED, httpStatus.FORBIDDEN])
+    errorResponseSpecification(err, res, [httpStatus.UNAUTHORIZED])
   }
 })
 
@@ -193,7 +193,7 @@ export const refreshToken = catchAsync(async (req, res) => {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'Token not found')
     }
 
-    if (session.isBlacklisted || session.user.status === status.BANNED) {
+    if (session.isBlacklisted) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token')
     }
 
@@ -220,6 +220,17 @@ export const logout = catchAsync(async (req, res) => {
     if (!authHeader) {
       throw new ApiError(httpStatus.BAD_REQUEST, httpStatus[400])
     }
+
+    const AT = authHeader.split(' ')[1]
+    const decodedAT = tokenService.decodeToken(AT)
+    if (!decodedAT?.sub) {
+      throw new ApiError(httpStatus.BAD_REQUEST, httpStatus[400])
+    }
+
+    if (!(await userService.getUserById(decodedAT?.sub))) {
+      throw new ApiError(httpStatus.BAD_REQUEST, httpStatus[400])
+    }
+
     const session = await tokenService.removeSession(refresh)
     if (!session) {
       throw new ApiError(httpStatus.NOT_FOUND, httpStatus[404])

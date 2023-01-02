@@ -8,7 +8,6 @@ import { errorResponseSpecification } from '../helpers/errorResponse.mjs'
 import { httpResponse } from '../helpers/httpResponse.mjs'
 import { emailService, tokenService, userService } from '../services/index.mjs'
 import { sseActivateAccount } from '../routes/v1/sse.route.mjs'
-import pick from '../helpers/pick.mjs'
 
 export const sendValidationEmail = catchAsync(async (req, res) => {
   const { user } = req
@@ -78,52 +77,5 @@ export const confirmAccount = catchAsync(async (req, res) => {
     sseActivateAccount.send({ hasActivated: true }, 'activateAccount')
   } catch (err) {
     errorResponseSpecification(err, res, [httpStatus.UNAUTHORIZED, httpStatus.FORBIDDEN])
-  }
-})
-
-export const getAllClients = catchAsync(async (req, res) => {
-  try {
-    const clientList = await userService.getAllClient()
-
-    httpResponse(res, httpStatus.OK, httpStatus[200], clientList)
-  } catch (err) {
-    errorResponseSpecification(err, res)
-  }
-})
-
-export const getClient = catchAsync(async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const client = await userService.getClientById(id)
-
-    httpResponse(res, httpStatus.OK, httpStatus[200], client)
-  } catch (err) {
-    errorResponseSpecification(err, res)
-  }
-})
-
-export const deleteCLient = catchAsync(async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const client = await userService.deleteCLientById(id)
-
-    httpResponse(res, httpStatus.OK, httpStatus[200], client)
-  } catch (err) {
-    errorResponseSpecification(err, res)
-  }
-})
-
-export const createClient = catchAsync(async (req, res) => {
-  const data = pick(req.body, ['username', 'email', 'phoneNumber', 'gender', 'address', 'password'])
-  data.address = (!data.address) ? undefined : data.address
-
-  try {
-    const client = await userService.createUser(data)
-
-    httpResponse(res, httpStatus.OK, httpStatus[200], client)
-  } catch (err) {
-    errorResponseSpecification(err, res, [httpStatus.BAD_REQUEST])
   }
 })

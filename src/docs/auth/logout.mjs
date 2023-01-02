@@ -2,6 +2,11 @@ export default {
   post: {
     summary: 'Sign out user',
     tags: ['Auth CRUD operations'],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     requestBody: {
       required: true,
       content: {
@@ -38,7 +43,7 @@ export default {
         },
       },
       400: {
-        description: 'Access token or refresh token not found in request',
+        description: 'Access token or refresh token not found in request or access token is fake',
         content: {
           'application/json': {
             example: {

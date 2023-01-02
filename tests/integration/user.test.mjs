@@ -25,7 +25,7 @@ describe('User routes', () => {
     beforeEach(async () => {
       const { role, status } = await import('../../src/constants/index.mjs')
       inactiveUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,
@@ -104,7 +104,7 @@ describe('User routes', () => {
     beforeEach(async () => {
       const { role, status } = await import('../../src/constants/index.mjs')
       inactiveUser = {
-        username: faker.internet.userName(),
+        fullname: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         role: role.USER,

@@ -9,12 +9,12 @@ export default {
           schema: {
             type: 'object',
             required: [
-              'name',
+              'fullname',
               'email',
               'password',
             ],
             properties: {
-              name: {
+              fullname: {
                 type: 'string',
               },
               email: {
@@ -29,7 +29,7 @@ export default {
               },
             },
             example: {
-              name: 'fake name',
+              fullname: 'fake name',
               email: 'fake@example.com',
               password: 'password1',
             },
