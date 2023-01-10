@@ -11,6 +11,7 @@ import { Role, User } from './src/models/index.mjs'
 const databaseName = process.env.DB_NAME || 'default'
 // Set up your uri connection to MongoDB, default is standalone
 let uri
+mongoose.set('strictQuery', false)
 if (process.env.NODE_ENV === 'development') {
   uri = `mongodb://127.0.0.1:27017/${databaseName}`
 } else if (process.env.NODE_ENV === 'production') {

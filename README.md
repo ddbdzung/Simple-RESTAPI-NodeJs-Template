@@ -1,8 +1,12 @@
-# Simple RESTAPI Template in NodeJS using ExpressJS, MongoDB
+# Simple Group Finance Management
 
-A simple restAPI nodejs template using expressjs, mongodb (or other database), logger (as winston and morgan)
+## Require:
 
-Install:
+Nodejs v18.13.0
+MongoDB v6.0.3
+NPM v8.19.2
+
+## Install:
 
 `npm i -g pnpm`
 
@@ -13,5 +17,7 @@ Open src\config\devenv.md file and config your own configurations
 Then...
 
 `pnpm run dev`
+
+## Demo:
 
 ### [David Dzung Dang](https://www.facebook.com/dzungdang.IT):whale:

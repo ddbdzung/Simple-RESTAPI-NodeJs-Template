@@ -8,6 +8,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import httpStatus from 'http-status'
 import compression from 'compression'
 
+import redisClient from './src/config/redis.mjs'
 import { config as configVars } from './src/validations/index.mjs'
 import routes from './src/routes/v1/index.mjs'
 import {
@@ -55,6 +56,8 @@ if (process.env.NODE_ENV === 'development') {
   }))
 }
 
+export const clientRedis = redisClient()
+
 // gzip compression
 app.use(compression());
 
@@ -80,7 +83,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // send back a 404 error for any unknown api request
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, httpStatus[404]));
 });
 

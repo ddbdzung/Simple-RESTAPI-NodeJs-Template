@@ -35,6 +35,7 @@ const envVarsSchema = Joi.object()
     API_KEY: Joi.string().description('api key for cloudinary'),
     API_SECRET: Joi.string().description('api secret for cloudinary'),
     UPLOAD_PRESET_1: Joi.string().description('folder media on cloudinary 1st'),
+    REDIS_URL: Joi.string().description('redis url'),
   })
   .unknown()
 
@@ -61,6 +62,7 @@ export const cloudName = envVars.CLOUD_NAME
 export const apiKey = envVars.API_KEY
 export const apiSecret = envVars.API_SECRET
 export const uploadPreset1 = envVars.UPLOAD_PRESET_1
+export const redisUrl = envVars.REDIS_URL
 export const host = envVars.HOST
 export const email = (nodeEnv === 'development' || nodeEnv === 'test')
   ? {
