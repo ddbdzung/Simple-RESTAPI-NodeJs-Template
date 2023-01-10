@@ -12,9 +12,7 @@
 
 `pnpm install`
 
-Config env file: Create .env in root folder
-Open src\config\devenv.md file and config your own configurations
-Then...
+Config env file: Remove .template extension path in .env.template file, contact host project for more infomation
 
 `pnpm run dev`
 
