@@ -1,4 +1,6 @@
-# Simple Group Finance Management
+# Simple RESTAPI Template in NodeJS using ExpressJS, MongoDB
+
+A simple restAPI nodejs template using expressjs, mongodb (or other database), logger (as winston and morgan)
 
 ## Require:
 
